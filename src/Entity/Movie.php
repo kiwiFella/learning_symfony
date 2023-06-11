@@ -54,7 +54,7 @@ class Movie
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
 
@@ -66,7 +66,7 @@ class Movie
         return $this->releaseYear;
     }
 
-    public function setReleaseYear(int $releaseYear): static
+    public function setReleaseYear(?int $releaseYear): static
     {
         $this->releaseYear = $releaseYear;
 
@@ -90,7 +90,7 @@ class Movie
         return $this->imagePath;
     }
 
-    public function setImagePath(string $imagePath): static
+    public function setImagePath(?string $imagePath): static
     {
         $this->imagePath = $imagePath;
 
