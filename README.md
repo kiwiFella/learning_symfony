@@ -46,4 +46,62 @@ symfony has built it'sown package for webpack - and has all kinds of symfony mag
     ````
 
 
+## FORMS:
+symfony has a package for forms that allows us to use a 'form' class
+1. run `composer require symfony/form`
+2. we can now get symfony to generate forms for us... run something like `symfony console make:form ClassName Modelname` 
+... so for my movie example it would be `symfony console make:form MovieFormType Movie`
+3. this will create a new directory called 'Form' in the 'src' directory with out form.
+    - this form automatically generates a form with the fields in the movie DB 
+4. we generate the form in the Controller!!!!
+    - this seems weird as it's frontend/view code in a controlller - but it's how symfony does it
 
+5. very complex process... but basically follow this (put in Controller):
+````php
+//NOTE-1: use the autocomplete to add `use` components
+// use App\Form\MovieFormType;
+// use Symfony\Component\HttpFoundation\Request;
+// use Doctrine\ORM\EntityManagerInterface;
+// use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
+// NOTE-2:
+// `$this->em` ... uses the EntityManagerInterface and is set in the __constructor
+
+#[Route('/movies/create', name: 'create_movie')]
+    public function create(Request $request): Response
+    {
+        $movie = new Movie;
+        $form = $this->createForm(MovieFormType::class, $movie);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $newMovie = $form->getData();
+
+            $imagePath = $form->get('imagePath')->getData();
+            if($imagePath){
+                $newFileName = uniqid(). '.'.$imagePath->guessExtension();
+
+                try{
+                    $imagePath->move(
+                        $this-> getParameter('kernel.project_dir') . '/public/uploads',
+                        $newFileName
+                    );
+                } catch (FileException $e){
+                    return new Response($e->getMessage());
+                }
+
+                $newMovie-> setImagePath('/uploads/' . $newFileName);
+
+            }
+
+            $this->em->persist($newMovie);
+            $this->em->flush();
+            return $this->redirectToRoute('movies');
+        }
+
+
+        return $this->render('movies/create.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+````
