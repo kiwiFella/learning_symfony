@@ -105,3 +105,39 @@ symfony has a package for forms that allows us to use a 'form' class
         ]);
     }
 ````
+
+
+## CRUD
+see the modelController for examples of all crud functions
+- includes a complex example of file upload
+- Model includes validation
+
+
+## Login / Register
+symfony has a package to easily create users login and register forms
+
+1. run `composer require symfony/security-bundle`
+    - this ads a new `make:user` command in the `symfony console` cli tool
+
+2. run `symfony console make:user User` - note: 'User' on the end is the DB table
+    - this will automatically create a USer Entity and User repository file as well as a security config package.
+
+3. next we need to create a migration... run `symfony console make:migration`
+    - this creates a new file in `migrations` directory.
+
+4. run `symfony console doctrine:migrations:migrate` to run the migration.
+    - this will create a `user` tablein the database
+
+5. now we need to create the registration form to create users
+    Symfony has another tool to do this - run: `symfony console make:registration-form`
+    - to keep it simple set `no` to validate email
+
+6. symfony has another tool to complete login scaffolding... 
+    run: `symfony console make:auth`
+    - select the login form option
+    - call it something like 'LoginFormAuthenticator'
+    - this will create a security template and controller as well as a config
+
+7. we need to set the `redirect` route after login - goto `/src/Security/LoginFormAuthenticator.php` and add redirect rout to the `onAuthenticationSuccess` function
+
+
