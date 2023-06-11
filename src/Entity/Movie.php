@@ -6,6 +6,7 @@ use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 class Movie
@@ -16,12 +17,18 @@ class Movie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     private ?string $title = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 4, max: 4)]
     private ?int $releaseYear = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
@@ -29,6 +36,8 @@ class Movie
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
     private Collection $actors;
+
+
 
     public function __construct()
     {
