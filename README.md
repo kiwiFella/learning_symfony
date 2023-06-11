@@ -140,4 +140,8 @@ symfony has a package to easily create users login and register forms
 
 7. we need to set the `redirect` route after login - goto `/src/Security/LoginFormAuthenticator.php` and add redirect rout to the `onAuthenticationSuccess` function
 
+8. in templates we can prevent buttons and content from being displayed to non-logged in users -  by checking is `app.user` is true `{% if app.user %} ...`
+- or terniary login/logout button example is `{{ app.user ? 'Logout' : 'Login'}}`
+
+9. don't forget to lockdown the endpoints (ie prevent someone entering the function in the url) - in `config/packages/security.yaml` find `access control` uncomment one of the examples and do something like `- { path: ^/movies/create, roles: ROLE_USER }` - the default role for registered users is set in the `src/Entity/User.php` file
 
