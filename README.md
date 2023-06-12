@@ -145,3 +145,43 @@ symfony has a package to easily create users login and register forms
 
 9. don't forget to lockdown the endpoints (ie prevent someone entering the function in the url) - in `config/packages/security.yaml` find `access control` uncomment one of the examples and do something like `- { path: ^/movies/create, roles: ROLE_USER }` - the default role for registered users is set in the `src/Entity/User.php` file
 
+--------------
+
+# TL;DR - Basics for a secure crud app
+
+# Setup Symfony:
+````bash
+symfony new project_name --version="6.3.*" --webapp
+cd project_name/
+symfony server:start
+````
+
+# create database
+1. setup .env file to point to mysql (user:pass & DB name)
+2. `symfony console doctrine:database:create`
+
+# create register/login for User 
+1. `composer require symfony/security-bundle`
+2. `symfony console make:user User`
+3. `symfony console make:migration`
+4. `symfony console doctrine:migrations:migrate`
+
+
+# create table for contacts list 
+1. `symfony console make:entity` 
+2. `symfony console make:migration`
+3. `symfony console doctrine:migrations:migrate`
+
+# create controller & all crud functions & files
+1. `php bin/console make:crud Contacts`
+
+# create login form
+1. `symfony console make:registration-form`
+2. `symfony console make:auth`
+3. set the `redirect` route in `onAuthenticationSuccess` function - on `/src/Security/LoginFormAuthenticator.php`
+4. set auth & access based on `app.user.id`
+
+
+# secure endpoints
+
+# limit data to user id
